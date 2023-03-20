@@ -5,7 +5,7 @@ setup(
     name="TACTUS - yolov7",
     version="0.0.0",
     description="Yolov7 library for tactus",
-    packages=['yolov7'],
+    packages=['tactus_yolov7'],
     classifiers=[
         "Development Status :: 5 - Beta",
         "Intended Audience :: Developers",
