@@ -9,31 +9,6 @@ from .utils.plots import output_to_keypoint
 from .utils.general import non_max_suppression_kpt
 
 
-def pred_frame(img: np.ndarray, device, model) -> dict:
-    image = letterbox(img, 960, stride=64, auto=True)[0]
-    image = transforms.ToTensor()(image)
-    image = torch.tensor(np.array([image.numpy()]))
-    image = image.to(device)
-    image = image.float()
-
-    with torch.no_grad():
-        output, _ = model(image)
-
-    output = non_max_suppression_kpt(output, 0.25, 0.65, nc=model.yaml['nc'], nkpt=model.yaml['nkpt'], kpt_label=True)
-    output = output_to_keypoint(output)
-
-    # Convert every keypoint detection in frame to List
-    skeletons = []
-    for idx in range(output.shape[0]):
-        skeletons.append({
-            "keypoints": output[idx][7:58].tolist(),
-            "score": output[idx][6].tolist(),
-            "box": output[idx][2:6].tolist(),
-            "idx": ["To be calculated using Deepsort"]
-        })
-
-    return skeletons
-
 class Yolov7:
     def __init__(self, model_weights: Path, device: str = 'cuda:0') -> None:
         cpu = device.lower() == 'cpu'
