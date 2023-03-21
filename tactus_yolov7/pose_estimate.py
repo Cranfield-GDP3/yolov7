@@ -54,7 +54,6 @@ class Yolov7:
                 "keypoints": output[idx][7:58].tolist(),
                 "score": output[idx][6].tolist(),
                 "box": output[idx][2:6].tolist(),
-                "idx": ["To be calculated using Deepsort"]
             })
 
         return skeletons
