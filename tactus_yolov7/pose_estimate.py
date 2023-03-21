@@ -2,7 +2,6 @@ from pathlib import Path
 import os
 import sys
 import numpy as np
-import cv2
 import torch
 from torchvision import transforms
 from .utils.datasets import letterbox
@@ -21,11 +20,22 @@ class Yolov7:
         self._model = attempt_load(model_weights, map_location=self._device)
         self._model.eval()
 
-    def predict_frame(self, img: np.ndarray):
-        new_width = (img.shape[0] // 64 + 1) * 64
-        new_height = (img.shape[1] // 64 + 1) * 64
-        image = letterbox(img, (new_width, new_height), stride=64, auto=True)[0]
-        image = transforms.ToTensor()(image)
+    def predict_frame(self, img: np.ndarray) -> list[dict]:
+        """
+        return the list of every skeleton keypoints in the image
+
+        Parameters
+        ----------
+        img : np.ndarray
+            an image with a width and height dividable by 64.
+            resize() can be used to get the new resized image.
+
+        Returns
+        -------
+        list
+            list of dictionnaries
+        """
+        image = transforms.ToTensor()(img)
         image = torch.tensor(np.array([image.numpy()]))
         image = image.to(self._device)
         image = image.float()
@@ -48,3 +58,24 @@ class Yolov7:
             })
 
         return skeletons
+
+def resize(img: np.ndarray) -> np.ndarray:
+    """
+    return t
+
+    Parameters
+    ----------
+    in_shape : tuple[int, int]
+        _description_
+
+    Returns
+    -------
+    tuple[int, int]
+        _description_
+    """
+    new_width = (img.shape[0] // 64 + 1) * 64
+    new_height = (img.shape[1] // 64 + 1) * 64
+
+    image = letterbox(img, (new_width, new_height), stride=64, auto=True)[0]
+
+    return image
