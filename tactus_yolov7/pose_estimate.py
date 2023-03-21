@@ -12,6 +12,8 @@ from .utils.general import non_max_suppression_kpt
 
 class Yolov7:
     def __init__(self, model_weights: Path, device: str = 'cuda:0') -> None:
+        if device is None:
+            device = "cuda:0"
         cpu = device.lower() == 'cpu'
         cuda = not cpu and torch.cuda.is_available()
         self._device = torch.device(device if cuda else 'cpu')
