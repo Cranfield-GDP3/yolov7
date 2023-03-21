@@ -65,13 +65,13 @@ def resize(img: np.ndarray) -> np.ndarray:
 
     Parameters
     ----------
-    in_shape : tuple[int, int]
-        _description_
+    img : np.ndarray
+        the img to be resized
 
     Returns
     -------
-    tuple[int, int]
-        _description_
+    np.ndarray
+        the new transformed image
     """
     new_width = (img.shape[0] // 64 + 1) * 64
     new_height = (img.shape[1] // 64 + 1) * 64
