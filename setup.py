@@ -3,7 +3,7 @@ from setuptools import setup
 
 setup(
     name="TACTUS - yolov7",
-    version="0.0.0",
+    version="0.0.1",
     description="Yolov7 library for tactus",
     packages=['tactus_yolov7'],
     classifiers=[

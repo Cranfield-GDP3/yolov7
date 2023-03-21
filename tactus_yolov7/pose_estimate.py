@@ -1,4 +1,6 @@
 from pathlib import Path
+import os
+import sys
 import numpy as np
 import cv2
 import torch
@@ -15,25 +17,14 @@ class Yolov7:
         cuda = not cpu and torch.cuda.is_available()
         self._device = torch.device(device if cuda else 'cpu')
 
+        sys.path.append(os.path.join(os.path.dirname(__file__), ""))
         self._model = attempt_load(model_weights, map_location=self._device)
         self._model.eval()
 
-    def predict_dir(self, input_dir: Path):
-        formatted_json = {}
-        formatted_json["frames"] = []
-        for frame_path in Path(input_dir).glob("*.jpg"):
-            frame_json = {"frame_id": frame_path.stem}
-
-            img = cv2.imread(str(frame_path))
-            skeletons = self.predict_frame(img)
-
-            frame_json["skeletons"] = skeletons
-            formatted_json["frames"].append(frame_json)
-
-        return formatted_json
-
     def predict_frame(self, img: np.ndarray):
-        image = letterbox(img, 960, stride=64, auto=True)[0]
+        new_width = (img.shape[0] // 64 + 1) * 64
+        new_height = (img.shape[1] // 64 + 1) * 64
+        image = letterbox(img, (new_width, new_height), stride=64, auto=True)[0]
         image = transforms.ToTensor()(image)
         image = torch.tensor(np.array([image.numpy()]))
         image = image.to(self._device)

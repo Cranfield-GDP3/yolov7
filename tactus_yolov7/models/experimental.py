@@ -4,7 +4,7 @@ import torch
 import torch.nn as nn
 
 from .common import Conv
-from ..utils.google_utils import attempt_download
+from tactus_yolov7.utils.google_utils import attempt_download
 
 
 class CrossConv(nn.Module):
