@@ -13,12 +13,17 @@ from .utils.general import non_max_suppression_kpt
 
 class Yolov7:
     def __init__(self, model_weights: Path, device: str = 'cuda:0') -> None:
+        self._select_device(device)
+        self._load_model(model_weights)
+
+    def _select_device(self, device):
         if device is None:
             device = "cuda:0"
         cpu = device.lower() == 'cpu'
         cuda = not cpu and torch.cuda.is_available()
         self._device = torch.device(device if cuda else 'cpu')
 
+    def _load_model(self, model_weights):
         # allow the detection of the module 'models' from yolov7
         # when loading the model with attempt_load()
         sys.path.append(os.path.join(os.path.dirname(__file__), ""))
