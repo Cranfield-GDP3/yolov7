@@ -1,11 +1,11 @@
-from setuptools import setup
+from setuptools import setup, find_packages
 
 
 setup(
-    name="TACTUS - yolov7",
+    name="tactus - yolov7",
     version="0.0.1",
     description="Yolov7 library for tactus",
-    packages=['tactus_yolov7'],
+    packages=find_packages(),
     classifiers=[
         "Development Status :: 5 - Beta",
         "Intended Audience :: Developers",
