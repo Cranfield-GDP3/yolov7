@@ -4,6 +4,7 @@ import sys
 import numpy as np
 import torch
 from torchvision import transforms
+from torch.hub import download_url_to_file
 from .utils.datasets import letterbox
 from .models.experimental import attempt_load
 from .utils.plots import output_to_keypoint
@@ -18,7 +19,10 @@ class Yolov7:
         cuda = not cpu and torch.cuda.is_available()
         self._device = torch.device(device if cuda else 'cpu')
 
+        # allow the detection of the module 'models' from yolov7
+        # when loading the model with attempt_load()
         sys.path.append(os.path.join(os.path.dirname(__file__), ""))
+        check_weights(model_weights)
         self._model = attempt_load(model_weights, map_location=self._device)
         self._model.eval()
 
@@ -80,3 +84,15 @@ def resize(img: np.ndarray) -> np.ndarray:
     image = letterbox(img, (new_width, new_height), stride=64, auto=True)[0]
 
     return image
+
+def download_weights(weights_path: Path):
+    """Download yolov7 pose weights"""
+
+    url = "https://github.com/WongKinYiu/yolov7/releases/download/v0.1/yolov7-w6-pose.pt"
+    weights_path.parent.mkdir(parents=True, exist_ok=True)
+    download_url_to_file(url, weights_path.absolute())
+
+def check_weights(weights_path: Path):
+    """check that the weights file exists"""
+    if not weights_path.exists():
+        download_weights(weights_path)
