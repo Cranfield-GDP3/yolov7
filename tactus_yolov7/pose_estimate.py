@@ -5,10 +5,10 @@ import numpy as np
 import torch
 from torchvision import transforms
 from torch.hub import download_url_to_file
-from tactus_yolov7..utils.datasets import letterbox
+from tactus_yolov7.utils.datasets import letterbox
 from .models.experimental import attempt_load
-from tactus_yolov7..utils.plots import output_to_keypoint
-from tactus_yolov7..utils.general import non_max_suppression_kpt
+from tactus_yolov7.utils.plots import output_to_keypoint
+from tactus_yolov7.utils.general import non_max_suppression_kpt
 
 
 class Yolov7:
